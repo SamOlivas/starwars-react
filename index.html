@@ -1,0 +1,75 @@
+
+
+<html>
+  <head>
+    <script src='https://unpkg.com/babel-standalone@6/babel.min.js'></script>
+    <script src='https://unpkg.com/react@16/umd/react.development.js' crossorigin=""></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin=""></script>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' />
+  </head>
+  <body>
+    <div id='root' class='container'>
+    <script type ='text/babel'>
+      console.log('running script')
+
+      class Main extends React.Component {
+        constructor () {
+          super()
+          this.state = {
+            people: [{
+              "name": "Obi-Wan Kenobi",
+            }],
+            loading: true
+          }
+        };
+
+        async getPeople() {
+          const reply = await fetch ('https://swapi.co/api/people/')
+          const people = await reply.json()
+          return people
+        };
+
+        async componentDidMount() {
+          try {
+            const people = await this.getPeople()
+            console.log(people)
+            this.setState({
+              people: people.results,
+              loading: false})
+          } catch (err) {
+            console.error(err)
+          }
+        };
+
+        displayPerson(URL) {
+          console.log('it works')
+          console.log(URL)
+        }
+
+        render () {
+          console.log(this.state)
+          if (this.state.loading) {
+          return <div>Not Loaded</div>;
+          }
+          return (
+            <div id="peopleBox">
+              <h3> Galaxy Directory </h3>
+                <ul>
+                  {this.state.people && this.state.people.map( person => {
+                     return (
+                      <li className='person' onClick={() => this.displayPerson(person.url)}>
+                        {person.name}
+                     </li>
+                     )}
+                  )}
+                </ul>
+            </div>
+          )
+        };
+      }
+
+     ReactDOM.render(<Main/>, document.getElementById('root'))
+    </script>
+    </div>
+  </body>
+</html>
