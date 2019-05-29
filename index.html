@@ -10,7 +10,7 @@
   <body>
     <div id='root' class='container'>
     <script type ='text/babel'>
-      console.log('running script')
+      let count = -1
 
       class Main extends React.Component {
         constructor () {
@@ -19,7 +19,8 @@
             people: [{
               "name": "Obi-Wan Kenobi",
             }],
-            loading: true
+            loading: true,
+            hash: 0
           }
         };
 
@@ -32,7 +33,6 @@
         async componentDidMount() {
           try {
             const people = await this.getPeople()
-            console.log(people)
             this.setState({
               people: people.results,
               loading: false})
@@ -42,8 +42,7 @@
         };
 
         displayPerson(URL) {
-          console.log('it works')
-          console.log(URL)
+        console.log(URL)
         }
 
         render () {
@@ -56,8 +55,10 @@
               <h3> Galaxy Directory </h3>
                 <ul>
                   {this.state.people && this.state.people.map( person => {
+                    count += 1
+                    console.log(count)
                      return (
-                      <li className='person' onClick={() => this.displayPerson(person.url)}>
+                      <li key={count} className='person' onClick={() => this.displayPerson(person.url)}>
                         {person.name}
                      </li>
                      )}
@@ -68,7 +69,7 @@
         };
       }
 
-     ReactDOM.render(<Main/>, document.getElementById('root'))
+      ReactDOM.render(<Main/>, document.getElementById('root'))
     </script>
     </div>
   </body>
